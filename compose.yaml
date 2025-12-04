@@ -1,0 +1,39 @@
+services:
+  master:
+    hostname: namenode
+    build:
+      context: .
+      dockerfile: .docker/namenode/Dockerfile
+    ports:
+      - 9870:9870
+    env_file:
+      - ./config
+    environment:
+      ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+  slave1:
+    build: 
+      context: .
+      dockerfile: .docker/datanode/Dockerfile
+    env_file:
+      - ./config
+  slave2:
+    build: 
+      context: .
+      dockerfile: .docker/datanode/Dockerfile
+    env_file:
+      - ./config
+  resourcemanager:
+    build: 
+      context: .
+      dockerfile: .docker/resourcemanager/Dockerfile
+    hostname: resourcemanager
+    ports:
+      - 8088:8088
+    env_file:
+      - ./config
+  nodemanager:
+    build: 
+      context: .
+      dockerfile: .docker/nodemanager/Dockerfile
+    env_file:
+      - ./config
