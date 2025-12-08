@@ -1,39 +1,46 @@
 services:
-  master:
-    hostname: namenode
-    build:
-      context: .
-      dockerfile: .docker/namenode/Dockerfile
-    ports:
-      - 9870:9870
-    env_file:
-      - ./config
-    environment:
-      ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
-  slave1:
-    build: 
-      context: .
-      dockerfile: .docker/datanode/Dockerfile
-    env_file:
-      - ./config
-  slave2:
-    build: 
-      context: .
-      dockerfile: .docker/datanode/Dockerfile
-    env_file:
-      - ./config
-  resourcemanager:
-    build: 
-      context: .
-      dockerfile: .docker/resourcemanager/Dockerfile
-    hostname: resourcemanager
-    ports:
-      - 8088:8088
-    env_file:
-      - ./config
-  nodemanager:
-    build: 
-      context: .
-      dockerfile: .docker/nodemanager/Dockerfile
-    env_file:
-      - ./config
+   namenode:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      hostname: namenode
+      command: ["hdfs", "namenode"]
+      ports:
+        - 9870:9870
+      env_file:
+        - ./config
+      environment:
+          ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+   datanode:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      command: ["hdfs", "datanode"]
+      env_file:
+        - ./config
+   datanode2:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      command: ["hdfs", "datanode"]
+      env_file:
+        - ./config
+   resourcemanager:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      hostname: resourcemanager
+      command: ["yarn", "resourcemanager"]
+      ports:
+         - 8088:8088
+      env_file:
+        - ./config
+      volumes:
+        - ./test.sh:/opt/test.sh
+   nodemanager:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      command: ["yarn", "nodemanager"]
+      env_file:
+        - ./config
