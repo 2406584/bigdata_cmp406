@@ -11,6 +11,7 @@ services:
         - ./config
       environment:
           ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+          HADOOP_HOME: "/opt/hadoop"
    datanode:
       build:
         context: .
